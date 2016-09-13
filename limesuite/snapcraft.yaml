@@ -1,0 +1,27 @@
+name: limesuite
+version: 0.1.0
+summary: LimeSuite apps
+description: LimeSuite command line utility and Graphical eval app.
+confinement: strict
+
+apps:
+    LimeUtil:
+        command: LimeUtil
+
+    lms7suite:
+        command: desktop-launch lms7suite
+        plugs: [home, x11]
+parts:
+
+    limesuite:
+        plugin: cmake
+        source: https://github.com/myriadrf/LimeSuite.git
+        after: [desktop-gtk3]
+        configflags:
+            - -DENABLE_SOAPY_LMS7=OFF
+        build-packages:
+            - libsqlite3-dev
+            - libi2c-dev
+            - libusb-1.0-0-dev
+            - libwxgtk3.0-dev
+            - freeglut3-dev

@@ -1,0 +1,132 @@
+name: limesdr-pothos 
+version: 0.1.0
+summary: LimeSuite + Pothos apps
+description: LimeSuite driver, SoapySDR, Pothos GUI, BTLE Demo
+confinement: strict
+
+apps:
+
+    SoapySDRUtil:
+        command: SoapySDRUtil
+
+    PothosUtil:
+        command: PothosUtil
+        plugs: [network, network-bind]
+
+    PothosGui:
+        command: desktop-launch PothosGui
+        plugs: [network, network-bind, x11]
+
+parts:
+    soapysdr:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapySDR.git
+        source-branch: maint
+        configflags:
+            - -DSOAPY_SDR_ROOT_ENV=SNAP
+            - -DENABLE_PYTHON3=OFF
+            - -DENABLE_PYTHON=OFF
+
+    soapyremote:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapyRemote.git
+        source-branch: maint
+        after: [soapysdr]
+
+    limesuite:
+        plugin: cmake
+        source: https://github.com/myriadrf/LimeSuite.git
+        configflags:
+            - -DENABLE_LMS7_GUI=OFF
+        after: [soapysdr]
+        build-packages:
+            - libsqlite3-dev
+            - libi2c-dev
+            - libusb-1.0-0-dev
+
+    poco:
+        plugin: cmake
+        source: https://github.com/pocoproject/poco.git
+        source-tag: poco-1.7.5-release
+
+    muparserx:
+        plugin: cmake
+        source: https://github.com/beltoforion/muparserx.git
+        source-tag: v4.0.7
+        configflags: ["-DBUILD_SHARED_LIBS=ON"]
+
+    spuce:
+        plugin: cmake
+        source: https://github.com/audiofilter/spuce.git
+        source-tag: "0.4.3"
+        configflags:
+            - -DBUILD_SHARED_LIBS=ON
+            - -DBUILD_TESTING=OFF
+            - -DENABLE_PYTHON=OFF
+
+    pothosserialization:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-serialization.git
+        source-branch: maint
+
+    pothosframework:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos.git
+        source-branch: maint
+        configflags:
+            - -DPOTHOS_ROOT_ENV=SNAP
+            - -DAPPDATA_ENV=SNAP_USER_DATA
+            - -DENABLE_TOOLKITS=OFF
+            - -DENABLE_INTERNAL_POCO=OFF
+            - -DENABLE_INTERNAL_SPUCE=OFF
+            - -DENABLE_INTERNAL_MUPARSERX=OFF
+            - -DENABLE_INTERNAL_SERIALIZATION=OFF
+            - -DCMAKE_BUILD_TYPE=DEBUG
+        after: [poco, pothosserialization, muparserx]
+        build-packages: [libnuma-dev]
+
+    pothossdr:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-sdr.git
+        source-branch: maint
+        after: [pothosframework, soapysdr]
+
+    pothosaudio:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-audio.git
+        source-branch: master
+        after: [pothosframework]
+        build-packages: [portaudio19-dev, libjack-jackd2-dev]
+
+    pothosblocks:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-blocks.git
+        source-branch: maint
+        after: [pothosframework]
+
+    pothoscomms:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-comms.git
+        source-branch: maint
+        after: [pothosframework, spuce]
+
+    pothosgui:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-gui.git
+        source-branch: maint
+        after: [pothosframework, desktop-qt5]
+        build-packages: [qtbase5-dev]
+
+    pothosplotters:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-plotters.git
+        source-branch: maint
+        after: [pothosframework, spuce]
+        build-packages: [qtbase5-dev, libqt5svg5-dev, libqt5opengl5-dev, libqwt-qt5-dev]
+
+    pothoswidgets:
+        plugin: cmake
+        source: https://github.com/pothosware/pothos-widgets.git
+        source-branch: master
+        after: [pothosframework]
+        build-packages: [qtbase5-dev, libqt5svg5-dev, libqt5opengl5-dev]
