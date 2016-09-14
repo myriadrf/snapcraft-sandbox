@@ -30,3 +30,9 @@ sudo snap install --force-dangerous <package-name>.snap
 ```
 sudo snap remove <package-name>
 ```
+
+## Documentation
+
+* snapcraft yaml syntax: https://developer.ubuntu.com/en/snappy/build-apps/snapcraft-syntax/
+* and more on parts: https://developer.ubuntu.com/en/snappy/build-apps/snapcraft-parts/
+* app/plugs that allow permissions through apparmor: http://snapcraft.io/docs/reference/interfaces

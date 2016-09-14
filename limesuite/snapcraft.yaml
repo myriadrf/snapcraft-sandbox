@@ -7,10 +7,11 @@ confinement: strict
 apps:
     LimeUtil:
         command: LimeUtil
+        plugs: [network, home]
 
     lms7suite:
         command: desktop-launch lms7suite
-        plugs: [home, x11]
+        plugs: [network, home, x11]
 parts:
 
     limesuite:
