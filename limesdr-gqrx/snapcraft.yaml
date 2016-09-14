@@ -1,0 +1,79 @@
+name: limesdr-gqrx 
+version: 0.1.0
+summary: LimeSuite + GQRX
+description: LimeSuite driver, SoapySDR, GQRX
+confinement: strict
+
+apps:
+
+    GQRX:
+        command: desktop-launch gqrx
+        plugs: [network, x11]
+
+parts:
+    soapysdr:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapySDR.git
+        source-branch: maint
+        configflags:
+            - -DSOAPY_SDR_ROOT_ENV=SNAP
+            - -DENABLE_PYTHON3=OFF
+            - -DENABLE_PYTHON=OFF
+
+    soapyremote:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapyRemote.git
+        source-branch: maint
+        after: [soapysdr]
+
+    limesuite:
+        plugin: cmake
+        source: https://github.com/myriadrf/LimeSuite.git
+        configflags:
+            - -DENABLE_LMS7_GUI=OFF
+        after: [soapysdr]
+        build-packages:
+            - libsqlite3-dev
+            - libi2c-dev
+            - libusb-1.0-0-dev
+
+    volk:
+        plugin: cmake
+        source: https://github.com/gnuradio/volk.git
+        source-branch: maint
+        build-packages: [libboost-all-dev, python-cheetah, python-mako]
+        configflags: #need a specified install prefix to avoid config errors
+            - -DCMAKE_INSTALL_PREFIX=/snap
+
+    gnuradio:
+        plugin: cmake
+        source: https://github.com/gnuradio/gnuradio.git
+        source-branch: maint
+        build-packages:
+            - libboost-all-dev
+            - python-cheetah
+            - python-mako
+            - libfftw3-dev
+        configflags:
+            - -DENABLE_PYTHON=OFF
+            - -DENABLE_TESTING=OFF
+            - -DENABLE_INTERNAL_VOLK=OFF
+            - -DENABLE_DOXYGEN=OFF
+            - -DENABLE_SPHINX=OFF
+            - -DENABLE_GR_QTGUI=OFF
+            - -DENABLE_GR_WXGUI=OFF
+        after: [volk]
+
+    grosmosdr:
+        plugin: cmake
+        source: git://git.osmocom.org/gr-osmosdr
+        build-packages: [libboost-all-dev]
+        configflags:
+            - -DENABLE_PYTHON=OFF
+        after: [soapysdr, gnuradio]
+
+    gqrx:
+        plugin: cmake
+        source: https://github.com/csete/gqrx.git
+        build-packages: [qtbase5-dev]
+        after: [grosmosdr, desktop-qt5]
