@@ -81,7 +81,6 @@ parts:
             - -DENABLE_INTERNAL_SPUCE=OFF
             - -DENABLE_INTERNAL_MUPARSERX=OFF
             - -DENABLE_INTERNAL_SERIALIZATION=OFF
-            - -DCMAKE_BUILD_TYPE=DEBUG
         after: [poco, pothosserialization, muparserx]
         build-packages: [libnuma-dev]
 
@@ -130,3 +129,8 @@ parts:
         source-branch: master
         after: [pothosframework]
         build-packages: [qtbase5-dev, libqt5svg5-dev, libqt5opengl5-dev]
+
+    btledemo:
+        plugin: cmake
+        source: https://github.com/DesignSparkrs/sdr-ble-demo.git
+        after: [pothosframework]

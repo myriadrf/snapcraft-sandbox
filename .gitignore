@@ -1,0 +1,4 @@
+*.snap
+parts/
+stage/
+prime/
