@@ -8,6 +8,7 @@ apps:
 
     SoapySDRUtil:
         command: SoapySDRUtil
+        plugs: [network]
 
     PothosUtil:
         command: PothosUtil
