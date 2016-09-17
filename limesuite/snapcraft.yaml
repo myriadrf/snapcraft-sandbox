@@ -11,7 +11,7 @@ apps:
 
     lms7suite:
         command: desktop-launch lms7suite
-        plugs: [network, home, x11]
+        plugs: [network, home, x11, opengl]
 parts:
 
     limesuite:
