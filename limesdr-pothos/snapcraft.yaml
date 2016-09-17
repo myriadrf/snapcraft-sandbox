@@ -16,7 +16,7 @@ apps:
 
     PothosGui:
         command: desktop-launch PothosGui
-        plugs: [network, network-bind, x11]
+        plugs: [network, network-bind, x11, opengl, home]
 
 parts:
     soapysdr:

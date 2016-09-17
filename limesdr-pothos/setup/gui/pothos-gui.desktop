@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Pothos GUI
+Comment=Pothos data flow suite graphical design tool
+TryExec=limesdr-pothos.PothosGui
+Exec=limesdr-pothos.PothosGui %F
+Icon=${SNAP}/meta/gui/pothos-gui-128.png
+MimeType=application/pothos-gui;
+Categories=Development;
