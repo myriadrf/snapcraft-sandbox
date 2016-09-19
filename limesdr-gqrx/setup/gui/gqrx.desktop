@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Gqrx
+GenericName=Software Defined Radio
+Comment=Software defined radio receiver implemented using GNU Radio and the Qt GUI toolkit
+# FIXME add comments in other languages
+GenericName[ru]=Программно-определённое радио
+Comment[ru]=Приемник для программно-определенного радио (SDR) использующий GNU Radio и библиотеку Qt.
+GenericName[nl]=Software Defined Radio
+Comment[nl]=Software defined radio ontvanger geïmplementeerd met GNU Radio en de Qt GUI toolkit
+Exec=limesdr-gqrx.gqrx %F
+Terminal=false
+Icon=${SNAP}/meta/gui/gqrx.svg
+Categories=Network;HamRadio;
+Keywords=SDR;Radio;HAM;

@@ -8,7 +8,7 @@ apps:
 
     GQRX:
         command: desktop-launch gqrx
-        plugs: [network, x11, pulseaudio]
+        plugs: [network, x11, pulseaudio, opengl, home]
 
 parts:
     soapysdr:
