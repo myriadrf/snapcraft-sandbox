@@ -6,7 +6,7 @@ confinement: strict
 
 apps:
     server:
-        command: bin/SoapySDRServer --bind
+        command: environment SoapySDRServer --bind
         daemon: simple
         plugs: [network, network-bind]
 
@@ -16,7 +16,6 @@ parts:
         source: https://github.com/pothosware/SoapySDR.git
         source-branch: maint
         configflags:
-            - -DSOAPY_SDR_ROOT_ENV=SNAP
             - -DENABLE_PYTHON3=OFF
             - -DENABLE_PYTHON=OFF
 
@@ -36,3 +35,9 @@ parts:
             - libsqlite3-dev
             - libi2c-dev
             - libusb-1.0-0-dev
+
+    environment:
+        plugin: dump
+        source: .
+        organize:
+            environment.sh: bin/environment

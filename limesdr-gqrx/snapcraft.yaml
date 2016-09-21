@@ -1,4 +1,4 @@
-name: limesdr-gqrx 
+name: limesdr-gqrx
 version: 0.1.0
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
@@ -6,8 +6,8 @@ confinement: strict
 
 apps:
 
-    GQRX:
-        command: desktop-launch gqrx
+    gqrx:
+        command: environment desktop-launch gqrx
         plugs: [network, x11, pulseaudio, opengl, home]
 
 parts:
@@ -16,7 +16,6 @@ parts:
         source: https://github.com/pothosware/SoapySDR.git
         source-branch: maint
         configflags:
-            - -DSOAPY_SDR_ROOT_ENV=SNAP
             - -DENABLE_PYTHON3=OFF
             - -DENABLE_PYTHON=OFF
 
@@ -77,3 +76,9 @@ parts:
         source: https://github.com/csete/gqrx.git
         build-packages: [qtbase5-dev]
         after: [grosmosdr, desktop-qt5]
+
+    environment:
+        plugin: dump
+        source: .
+        organize:
+            environment.sh: bin/environment
