@@ -37,7 +37,7 @@ parts:
         plugin: cmake
         source: https://github.com/myriadrf/LimeSuite.git
         configflags:
-            - -DENABLE_LMS7_GUI=OFF
+            - -DENABLE_GUI=OFF
         after: [soapysdr]
         build-packages:
             - libsqlite3-dev

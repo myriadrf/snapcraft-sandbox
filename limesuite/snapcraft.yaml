@@ -9,8 +9,8 @@ apps:
         command: LimeUtil
         plugs: [network, home]
 
-    lms7suite:
-        command: desktop-launch lms7suite
+    LimeSuiteGUI:
+        command: desktop-launch LimeSuiteGUI
         plugs: [network, home, x11, opengl]
 parts:
 
