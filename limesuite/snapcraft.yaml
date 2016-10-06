@@ -1,5 +1,5 @@
 name: limesuite
-version: 0.1.0
+version: 16.8.23.0
 summary: LimeSuite apps
 description: LimeSuite command line utility and Graphical eval app.
 confinement: strict

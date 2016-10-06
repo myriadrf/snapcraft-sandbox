@@ -1,14 +1,27 @@
 name: limesdr-gqrx
-version: 0.1.0
+version: 2.6.0
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
 
 apps:
 
+    SoapySDRUtil:
+        command: environment SoapySDRUtil
+        plugs: [network]
+
     gqrx:
         command: environment desktop-launch gqrx
         plugs: [network, x11, pulseaudio, opengl, home]
+
+    gnuradio-config-info:
+        command: environment gnuradio-config-info
+
+    volk-config-info:
+        command: environment volk-config-info
+
+    volk_profile:
+        command: environment volk_profile
 
 parts:
     soapysdr:

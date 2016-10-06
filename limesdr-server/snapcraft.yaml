@@ -1,5 +1,5 @@
 name: soapysdr-server
-version: 0.1.0
+version: 0.5.3.0
 summary: SoapySDR server
 description: SoapySDR server that binds on snap install
 confinement: strict

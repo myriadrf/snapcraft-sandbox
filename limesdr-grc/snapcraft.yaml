@@ -1,14 +1,27 @@
 name: limesdr-grc
-version: 0.1.0
+version: 3.7.10.1.0
 summary: LimeSuite + GRC
 description: LimeSuite driver, SoapySDR, GRC, DTV demo
 confinement: strict
 
 apps:
 
+    SoapySDRUtil:
+        command: environment SoapySDRUtil
+        plugs: [network]
+
     gnuradio-companion:
         command: environment desktop-launch gnuradio-companion
         plugs: [network, x11, opengl, home]
+
+    gnuradio-config-info:
+        command: environment gnuradio-config-info
+
+    volk-config-info:
+        command: environment volk-config-info
+
+    volk_profile:
+        command: environment volk_profile
 
 parts:
     soapysdr:
