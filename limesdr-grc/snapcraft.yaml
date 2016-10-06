@@ -1,14 +1,14 @@
-name: limesdr-gqrx
+name: limesdr-grc
 version: 0.1.0
-summary: LimeSuite + GQRX
-description: LimeSuite driver, SoapySDR, GQRX
+summary: LimeSuite + GRC
+description: LimeSuite driver, SoapySDR, GRC, DTV demo
 confinement: strict
 
 apps:
 
-    gqrx:
-        command: environment desktop-launch gqrx
-        plugs: [network, x11, pulseaudio, opengl, home]
+    gnuradio-companion:
+        command: environment desktop-launch gnuradio-companion
+        plugs: [network, x11, opengl, home]
 
 parts:
     soapysdr:
@@ -37,6 +37,7 @@ parts:
             - libusb-1.0-0-dev
 
     volk:
+        plugin: cmake
         source: https://github.com/pothosware/volk.git
         source-branch: volk_snaps
         build-packages: [libboost-all-dev]
@@ -49,36 +50,40 @@ parts:
         build-packages:
             - libboost-all-dev
             - libfftw3-dev
+            - python-dev
+            - swig
         configflags:
-            - -DENABLE_PYTHON=OFF
             - -DENABLE_TESTING=OFF
             - -DENABLE_INTERNAL_VOLK=OFF
             - -DENABLE_DOXYGEN=OFF
             - -DENABLE_SPHINX=OFF
+            - -DENABLE_GR_UHD=OFF
             - -DENABLE_GR_QTGUI=OFF
-            - -DENABLE_GR_WXGUI=OFF
-        after: [volk]
+
+        after: [desktop-gtk3, volk, environment]
 
     grosmosdr:
         plugin: cmake
         source: git://git.osmocom.org/gr-osmosdr
-        build-packages: [libboost-all-dev]
-        configflags:
-            - -DENABLE_PYTHON=OFF
-        after: [soapysdr, gnuradio]
-
-    gqrx:
-        plugin: cmake
-        source: https://github.com/csete/gqrx.git
-        build-packages: [qtbase5-dev]
-        after: [grosmosdr, desktop-qt5]
+        build-packages:
+            - libboost-all-dev
+            - python
+            - python-cheetah
+            - swig
+        after: [soapysdr, gnuradio, environment]
 
     environment:
         plugin: dump
         source: .
         organize:
             environment.sh: bin/environment
+            wx.pth: usr/lib/wx/python/wx.pth
         stage-packages:
             - python
             - python-cheetah
             - python-mako
+            - python-numpy
+            - python-gtk2
+            - python-lxml
+            - python-wxgtk3.0
+            - python-wxversion

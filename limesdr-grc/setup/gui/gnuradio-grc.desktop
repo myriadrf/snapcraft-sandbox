@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=GRC
+Exec=limesdr-grc.gnuradio-companion %F
+Categories=Development;
+MimeType=application/gnuradio-grc;
+Icon=${SNAP}/meta/gui/gnuradio_logo_icon-square.svg
