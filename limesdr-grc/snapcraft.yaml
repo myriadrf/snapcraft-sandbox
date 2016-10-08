@@ -20,7 +20,7 @@ apps:
     volk-config-info:
         command: environment volk-config-info
 
-    volk_profile:
+    volk-profile:
         command: environment volk_profile
 
 parts:

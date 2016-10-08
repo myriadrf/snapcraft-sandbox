@@ -20,7 +20,7 @@ apps:
     volk-config-info:
         command: environment volk-config-info
 
-    volk_profile:
+    volk-profile:
         command: environment volk_profile
 
 parts:
@@ -50,6 +50,7 @@ parts:
             - libusb-1.0-0-dev
 
     volk:
+        plugin: cmake
         source: https://github.com/pothosware/volk.git
         source-branch: volk_snaps
         build-packages: [libboost-all-dev]
