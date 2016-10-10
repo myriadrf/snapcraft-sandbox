@@ -12,7 +12,7 @@ apps:
 
     gnuradio-companion:
         command: environment desktop-launch gnuradio-companion
-        plugs: [network, x11, opengl, home]
+        plugs: [network, network-bind, x11, opengl, home]
 
     gnuradio-config-info:
         command: environment gnuradio-config-info
@@ -53,18 +53,34 @@ parts:
         plugin: cmake
         source: https://github.com/pothosware/volk.git
         source-branch: volk_snaps
-        build-packages: [libboost-all-dev]
+        build-packages: [libboost-all-dev, liborc-0.4-dev]
         after: [environment]
 
     gnuradio:
         plugin: cmake
-        source: https://github.com/gnuradio/gnuradio.git
-        source-branch: maint
+        source: https://github.com/pothosware/gnuradio.git
+        source-branch: gr_snaps
         build-packages:
-            - libboost-all-dev
-            - libfftw3-dev
             - python-dev
-            - swig
+            - libasound2-dev
+            - libboost-all-dev
+            - libcodec2-dev
+            - libcomedi-dev
+            - libfftw3-dev
+            - libfontconfig1-dev
+            - libgsl-dev
+            - libgsm1-dev
+            - libjack-jackd2-dev
+            - liblog4cpp5-dev
+            - libpulse-dev
+            - libqt4-dev
+            - libqwt5-qt4-dev
+            - libsdl1.2-dev
+            - libsndfile1-dev
+            - libxi-dev
+            - libxrender-dev
+            - libzmq3-dev
+            - portaudio19-dev
         configflags:
             - -DENABLE_TESTING=OFF
             - -DENABLE_INTERNAL_VOLK=OFF
@@ -93,10 +109,15 @@ parts:
             wx.pth: usr/lib/wx/python/wx.pth
         stage-packages:
             - python
+            - python-opengl
             - python-cheetah
             - python-mako
             - python-numpy
+            - python-scipy
             - python-gtk2
             - python-lxml
             - python-wxgtk3.0
             - python-wxversion
+            - python-zmq
+            - python-qwt5-qt4
+            - swig
