@@ -51,8 +51,8 @@ parts:
 
     volk:
         plugin: cmake
-        source: https://github.com/pothosware/volk.git
-        source-branch: volk_snaps
+        source: https://github.com/gnuradio/volk.git
+        source-branch: master #must be master for now for VOLK_PREFIX
         build-packages: [libboost-all-dev, liborc-0.4-dev]
         after: [environment]
 
