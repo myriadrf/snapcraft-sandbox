@@ -1,0 +1,79 @@
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#!! ......in progress.....
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+name: limesdr-osmotrx
+version: 0.1.0
+summary: LimeSuite + Osmo-TRX
+description: LimeSuite driver, SoapySDR, UHD, Osmo-TRX
+confinement: strict
+
+apps:
+
+    SoapySDRUtil:
+        command: environment SoapySDRUtil
+        plugs: [network]
+
+    SoapySDRUtil:
+        command: environment uhd_find_devices
+        plugs: [network]
+parts:
+    soapysdr:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapySDR.git
+        source-branch: maint
+        configflags:
+            - -DENABLE_PYTHON3=OFF
+            - -DENABLE_PYTHON=OFF
+
+    uhd:
+        plugin: cmake
+        source: https://github.com/EttusResearch/uhd.git
+        source-branch: maint
+        source-subdir: host
+        build-packages: [libboost-all-dev]
+        after: [environment]
+        configflags:
+            - -DENABLE_MANUAL=OFF
+            - -DENABLE_DOXYGEN=OFF
+            - -DENABLE_MAN_PAGES=OFF
+            - -DENABLE_EXAMPLES=OFF
+            - -DENABLE_TESTS=OFF
+            - -DENABLE_USB=OFF
+            - -DENABLE_GPSD=OFF
+            - -DENABLE_B100=OFF
+            - -DENABLE_B200=OFF
+            - -DENABLE_E100=OFF
+            - -DENABLE_E300=OFF
+            - -DENABLE_USRP1=OFF
+            - -DENABLE_USRP2=OFF
+            - -DENABLE_X300=OFF
+            - -DENABLE_N230=OFF
+            - -DENABLE_OCTOCLOCK=OFF
+
+    soapyuhd:
+        plugin: cmake
+        source: https://github.com/pothosware/SoapyUHD.git
+        source-branch: master
+        after: [soapysdr, uhd]
+
+    limesuite:
+        plugin: cmake
+        source: https://github.com/myriadrf/LimeSuite.git
+        configflags:
+            - -DENABLE_GUI=OFF
+        after: [soapysdr]
+        build-packages:
+            - libsqlite3-dev
+            - libi2c-dev
+            - libusb-1.0-0-dev
+
+    environment:
+        plugin: dump
+        source: .
+        organize:
+            environment.sh: bin/environment
+        stage-packages:
+            - python
+            - python-cheetah
+            - python-mako
