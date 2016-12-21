@@ -12,11 +12,24 @@ apps:
 
     SoapySDRUtil:
         command: environment SoapySDRUtil
-        plugs: [network]
+        plugs: [network, network-bind]
 
-    SoapySDRUtil:
+    uhd-find-devices:
         command: environment uhd_find_devices
-        plugs: [network]
+        plugs: [network, network-bind]
+
+    osmo-nitb:
+        command: environment osmo-nitb
+        plugs: [network, network-bind]
+
+    osmobts-trx:
+        command: environment osmobts-trx
+        plugs: [network, network-bind]
+
+    osmo-trx:
+        command: environment osmo-trx
+        plugs: [network, network-bind]
+
 parts:
     soapysdr:
         plugin: cmake
@@ -26,36 +39,55 @@ parts:
             - -DENABLE_PYTHON3=OFF
             - -DENABLE_PYTHON=OFF
 
-    uhd:
-        plugin: cmake
-        source: https://github.com/EttusResearch/uhd.git
-        source-branch: maint
-        source-subdir: host
-        build-packages: [libboost-all-dev]
-        after: [environment]
-        configflags:
-            - -DENABLE_MANUAL=OFF
-            - -DENABLE_DOXYGEN=OFF
-            - -DENABLE_MAN_PAGES=OFF
-            - -DENABLE_EXAMPLES=OFF
-            - -DENABLE_TESTS=OFF
-            - -DENABLE_USB=OFF
-            - -DENABLE_GPSD=OFF
-            - -DENABLE_B100=OFF
-            - -DENABLE_B200=OFF
-            - -DENABLE_E100=OFF
-            - -DENABLE_E300=OFF
-            - -DENABLE_USRP1=OFF
-            - -DENABLE_USRP2=OFF
-            - -DENABLE_X300=OFF
-            - -DENABLE_N230=OFF
-            - -DENABLE_OCTOCLOCK=OFF
+    osmocombo:
+        source: osmocombo
+        plugin: make
+        build-packages:
+            - build-essential
+            - libsqlite3-dev
+            - libboost-all-dev
+            - libmnl-dev
+            - libssl-dev
+            - libpcap-dev
+            - libi2c-dev
+            - libusb-1.0-0-dev
+            - autoconf
+            - libtool
+            - libpcsclite-dev
+            - libortp-dev
+            - libdbi-dev
+            - libdbd-sqlite3
 
-    soapyuhd:
-        plugin: cmake
-        source: https://github.com/pothosware/SoapyUHD.git
-        source-branch: master
-        after: [soapysdr, uhd]
+    #uhd:
+        #plugin: cmake
+        #source: https://github.com/EttusResearch/uhd.git
+        #source-branch: maint
+        #source-subdir: host
+        #build-packages: [libboost-all-dev]
+        #after: [environment]
+        #configflags:
+            #- -DENABLE_MANUAL=OFF
+            #- -DENABLE_DOXYGEN=OFF
+            #- -DENABLE_MAN_PAGES=OFF
+            #- -DENABLE_EXAMPLES=OFF
+            #- -DENABLE_TESTS=OFF
+            #- -DENABLE_USB=OFF
+            #- -DENABLE_GPSD=OFF
+            #- -DENABLE_B100=OFF
+            #- -DENABLE_B200=OFF
+            #- -DENABLE_E100=OFF
+            #- -DENABLE_E300=OFF
+            #- -DENABLE_USRP1=OFF
+            #- -DENABLE_USRP2=OFF
+            #- -DENABLE_X300=OFF
+            #- -DENABLE_N230=OFF
+            #- -DENABLE_OCTOCLOCK=OFF
+
+    #soapyuhd:
+        #plugin: cmake
+        #source: https://github.com/pothosware/SoapyUHD.git
+        #source-branch: master
+        #after: [soapysdr, uhd]
 
     limesuite:
         plugin: cmake
