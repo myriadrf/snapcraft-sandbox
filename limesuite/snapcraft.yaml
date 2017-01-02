@@ -17,6 +17,7 @@ parts:
     limesuite:
         plugin: cmake
         source: https://github.com/myriadrf/LimeSuite.git
+        source-branch: stable
         after: [desktop-gtk3]
         configflags:
             - -DENABLE_SOAPY_LMS7=OFF

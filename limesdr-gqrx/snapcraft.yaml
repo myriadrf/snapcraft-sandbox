@@ -41,6 +41,7 @@ parts:
     limesuite:
         plugin: cmake
         source: https://github.com/myriadrf/LimeSuite.git
+        source-branch: stable
         configflags:
             - -DENABLE_GUI=OFF
         after: [soapysdr]
