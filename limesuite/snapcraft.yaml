@@ -21,6 +21,7 @@ parts:
         after: [desktop-gtk3]
         configflags:
             - -DENABLE_SOAPY_LMS7=OFF
+            - -DDOWNLOAD_IMAGES=TRUE
         build-packages:
             - libsqlite3-dev
             - libi2c-dev

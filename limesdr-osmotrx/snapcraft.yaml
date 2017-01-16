@@ -95,6 +95,7 @@ parts:
         source-branch: stable
         configflags:
             - -DENABLE_GUI=OFF
+            - -DDOWNLOAD_IMAGES=TRUE
         after: [soapysdr]
         build-packages:
             - libsqlite3-dev
