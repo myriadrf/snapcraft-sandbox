@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export LIME_SUITE_ROOT=$SNAP
 export SOAPY_SDR_ROOT=$SNAP
 export APPDATA=$SNAP_USER_COMMON
 export GRC_BLOCKS_PATH=$SNAP/share/gnuradio/grc/blocks

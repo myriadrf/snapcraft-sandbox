@@ -6,11 +6,11 @@ confinement: strict
 
 apps:
     LimeUtil:
-        command: LimeUtil
+        command: environment LimeUtil
         plugs: [network, home]
 
     LimeSuiteGUI:
-        command: desktop-launch LimeSuiteGUI
+        command: environment desktop-launch LimeSuiteGUI
         plugs: [network, home, x11, opengl]
 parts:
 
@@ -28,3 +28,9 @@ parts:
             - libusb-1.0-0-dev
             - libwxgtk3.0-dev
             - freeglut3-dev
+
+    environment:
+        plugin: dump
+        source: .
+        organize:
+            environment.sh: bin/environment
