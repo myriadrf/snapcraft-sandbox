@@ -23,6 +23,14 @@ apps:
     volk-profile:
         command: environment volk_profile
 
+    osmocom-fft:
+        command: environment desktop-launch osmocom_fft
+        plugs: [network, network-bind, x11, opengl, home]
+
+    osmocom-siggen:
+        command: environment desktop-launch osmocom_siggen
+        plugs: [network, network-bind, x11, opengl, home]
+
 parts:
     soapysdr:
         plugin: cmake
@@ -103,6 +111,15 @@ parts:
             - swig
         after: [soapysdr, gnuradio, environment]
 
+    grrds:
+        plugin: cmake
+        source: https://github.com/bastibl/gr-rds.git
+        build-packages:
+            - libboost-all-dev
+            - python
+            - swig
+        after: [soapysdr, gnuradio, environment]
+
     environment:
         plugin: dump
         source: .
@@ -111,6 +128,7 @@ parts:
             wx.pth: usr/lib/wx/python/wx.pth
         stage-packages:
             - python
+            - python-six
             - python-opengl
             - python-cheetah
             - python-mako

@@ -113,5 +113,6 @@ parts:
             environment.sh: bin/environment
         stage-packages:
             - python
+            - python-six
             - python-cheetah
             - python-mako
