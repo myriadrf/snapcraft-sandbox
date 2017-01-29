@@ -94,6 +94,8 @@ parts:
         source: https://github.com/pothosware/SoapyUHD.git
         source-branch: master
         after: [soapysdr, uhd]
+        configflags:
+             - -DUHD_ROOT=.
 
     limesuite:
         plugin: cmake
