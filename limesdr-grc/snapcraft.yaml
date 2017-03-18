@@ -1,34 +1,45 @@
 name: limesdr-grc
-version: 3.7.10.1.0
+version: 3.7.11.1.0
 summary: LimeSuite + GRC
 description: LimeSuite driver, SoapySDR, GRC, DTV demo, RDS, DRM
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
+    SOAPY_SDR_ROOT: $SNAP
+    APPDATA: $SNAP_USER_COMMON
+    GRC_BLOCKS_PATH: $SNAP/share/gnuradio/grc/blocks
+    VOLK_CONFIGPATH: $SNAP_USER_COMMON
+    VOLK_PREFIX: $SNAP
+    GR_PREFIX: $SNAP
+    PYTHONPATH: $SNAP/lib/python2.7/dist-packages/
 
 apps:
 
     SoapySDRUtil:
-        command: environment SoapySDRUtil
+        command: SoapySDRUtil
         plugs: [network]
 
     gnuradio-companion:
-        command: environment desktop-launch gnuradio-companion
+        command: desktop-launch gnuradio-companion
         plugs: [network, network-bind, x11, opengl, home]
 
     gnuradio-config-info:
-        command: environment gnuradio-config-info
+        command: gnuradio-config-info
 
     volk-config-info:
-        command: environment volk-config-info
+        command: volk-config-info
 
     volk-profile:
-        command: environment volk_profile
+        command: volk_profile
 
     osmocom-fft:
-        command: environment desktop-launch osmocom_fft
+        command: desktop-launch osmocom_fft
         plugs: [network, network-bind, x11, opengl, home]
 
     osmocom-siggen:
-        command: environment desktop-launch osmocom_siggen
+        command: desktop-launch osmocom_siggen
         plugs: [network, network-bind, x11, opengl, home]
 
 parts:
@@ -64,7 +75,7 @@ parts:
         source: https://github.com/gnuradio/volk.git
         source-branch: master #must be master for now for VOLK_PREFIX
         build-packages: [libboost-all-dev, liborc-0.4-dev]
-        after: [environment]
+        after: [pythonmodules]
 
     gnuradio:
         plugin: cmake
@@ -99,28 +110,27 @@ parts:
             - -DENABLE_GR_UHD=OFF
             - -DENABLE_GR_QTGUI=OFF
 
-        after: [desktop-gtk3, volk, environment]
+        after: [desktop-gtk3, volk]
 
     grosmosdr:
         plugin: cmake
         source: git://git.osmocom.org/gr-osmosdr
-        after: [soapysdr, gnuradio, environment]
+        after: [soapysdr, gnuradio]
 
     grrds:
         plugin: cmake
         source: https://github.com/bastibl/gr-rds.git
-        after: [gnuradio, environment]
+        after: [gnuradio]
 
     grdrm:
         plugin: cmake
         source: https://github.com/kit-cel/gr-drm.git
-        after: [gnuradio, environment]
+        after: [gnuradio]
 
-    environment:
+    pythonmodules:
         plugin: dump
         source: .
         organize:
-            environment.sh: bin/environment
             wx.pth: usr/lib/wx/python/wx.pth
         stage-packages:
             - python
