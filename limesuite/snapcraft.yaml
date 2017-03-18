@@ -1,16 +1,20 @@
 name: limesuite
-version: 17.01.0.0
+version: 17.02.1.0
 summary: LimeSuite apps
 description: LimeSuite command line utility and Graphical eval app.
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
 
 apps:
     LimeUtil:
-        command: environment LimeUtil
+        command: LimeUtil
         plugs: [network, home]
 
     LimeSuiteGUI:
-        command: environment desktop-launch LimeSuiteGUI
+        command: desktop-launch LimeSuiteGUI
         plugs: [network, home, x11, opengl]
 parts:
 
@@ -28,9 +32,3 @@ parts:
             - libusb-1.0-0-dev
             - libwxgtk3.0-dev
             - freeglut3-dev
-
-    environment:
-        plugin: dump
-        source: .
-        organize:
-            environment.sh: bin/environment
