@@ -1,8 +1,0 @@
-#!/bin/sh
-
-export LIME_SUITE_ROOT=$SNAP
-export SOAPY_SDR_ROOT=$SNAP
-export POTHOS_ROOT=$SNAP
-export APPDATA=$SNAP_USER_COMMON
-
-$@

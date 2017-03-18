@@ -1,21 +1,28 @@
 name: limesdr-pothos 
-version: 0.4.2.0
+version: 0.4.3.0
 summary: LimeSuite + Pothos apps
 description: LimeSuite driver, SoapySDR, Pothos GUI, BTLE Demo
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
+    SOAPY_SDR_ROOT: $SNAP
+    POTHOS_ROOT: $SNAP
+    APPDATA: $SNAP_USER_COMMON
 
 apps:
 
     SoapySDRUtil:
-        command: environment SoapySDRUtil
+        command: SoapySDRUtil
         plugs: [network]
 
     PothosUtil:
-        command: environment PothosUtil
+        command: PothosUtil
         plugs: [network, network-bind, home]
 
     PothosGui:
-        command: environment desktop-launch PothosGui
+        command: desktop-launch PothosGui
         plugs: [network, network-bind, x11, opengl, home]
 
 parts:
@@ -134,9 +141,3 @@ parts:
         plugin: cmake
         source: https://github.com/DesignSparkrs/sdr-ble-demo.git
         after: [pothosframework]
-
-    environment:
-        plugin: dump
-        source: .
-        organize:
-            environment.sh: bin/environment
