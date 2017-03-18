@@ -1,27 +1,36 @@
 name: limesdr-gqrx
-version: 2.6.1
+version: 2.6.1.1
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
+    SOAPY_SDR_ROOT: $SNAP
+    APPDATA: $SNAP_USER_COMMON
+    VOLK_CONFIGPATH: $SNAP_USER_COMMON
+    VOLK_PREFIX: $SNAP
+    GR_PREFIX: $SNAP
 
 apps:
 
     SoapySDRUtil:
-        command: environment SoapySDRUtil
+        command: SoapySDRUtil
         plugs: [network]
 
     gqrx:
-        command: environment desktop-launch gqrx
+        command: desktop-launch gqrx
         plugs: [network, x11, pulseaudio, opengl, home]
 
     gnuradio-config-info:
-        command: environment gnuradio-config-info
+        command: gnuradio-config-info
 
     volk-config-info:
-        command: environment volk-config-info
+        command: volk-config-info
 
     volk-profile:
-        command: environment volk_profile
+        command: volk_profile
 
 parts:
     soapysdr:
@@ -56,7 +65,7 @@ parts:
         source: https://github.com/gnuradio/volk.git
         source-branch: master #must be master for now for VOLK_PREFIX
         build-packages: [libboost-all-dev, liborc-0.4-dev]
-        after: [environment]
+        after: [pythonmodules]
 
     gnuradio:
         plugin: cmake
@@ -106,11 +115,8 @@ parts:
         build-packages: [qtbase5-dev]
         after: [grosmosdr, desktop-qt5]
 
-    environment:
-        plugin: dump
-        source: .
-        organize:
-            environment.sh: bin/environment
+    pythonmodules:
+        plugin: nil
         stage-packages:
             - python
             - python-six
