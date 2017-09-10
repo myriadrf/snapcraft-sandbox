@@ -3,10 +3,15 @@ version: 0.5.3.0
 summary: SoapySDR server
 description: SoapySDR server that binds on snap install
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
+    SOAPY_SDR_ROOT: $SNAP
 
 apps:
     server:
-        command: environment SoapySDRServer --bind
+        command: SoapySDRServer --bind
         daemon: simple
         plugs: [network, network-bind]
 
@@ -37,9 +42,3 @@ parts:
             - libsqlite3-dev
             - libi2c-dev
             - libusb-1.0-0-dev
-
-    environment:
-        plugin: dump
-        source: .
-        organize:
-            environment.sh: bin/environment
