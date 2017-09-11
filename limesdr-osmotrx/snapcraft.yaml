@@ -7,27 +7,34 @@ version: 0.1.0
 summary: LimeSuite + Osmo-TRX
 description: LimeSuite driver, SoapySDR, UHD, Osmo-TRX
 confinement: strict
+grade: stable
+
+environment:
+    LIME_SUITE_ROOT: $SNAP
+    SOAPY_SDR_ROOT: $SNAP
+    APPDATA: $SNAP_USER_COMMON
+    UHD_MODULE_PATH: $SNAP/lib/uhd/modules
 
 apps:
 
     SoapySDRUtil:
-        command: environment SoapySDRUtil
+        command: SoapySDRUtil
         plugs: [network, network-bind]
 
     uhd-find-devices:
-        command: environment uhd_find_devices
+        command: uhd_find_devices
         plugs: [network, network-bind]
 
     osmo-nitb:
-        command: environment osmo-nitb
+        command: osmo-nitb
         plugs: [network, network-bind]
 
     osmobts-trx:
-        command: environment osmobts-trx
+        command: osmobts-trx
         plugs: [network, network-bind]
 
     osmo-trx:
-        command: environment osmo-trx
+        command: osmo-trx
         plugs: [network, network-bind]
 
 parts:
@@ -70,7 +77,7 @@ parts:
         source-branch: maint
         source-subdir: host
         build-packages: [libboost-all-dev]
-        after: [environment]
+        after: [pythonmodules]
         configflags:
             - -DENABLE_MANUAL=OFF
             - -DENABLE_DOXYGEN=OFF
@@ -110,11 +117,9 @@ parts:
             - libi2c-dev
             - libusb-1.0-0-dev
 
-    environment:
+    pythonmodules:
         plugin: dump
         source: .
-        organize:
-            environment.sh: bin/environment
         stage-packages:
             - python
             - python-cheetah
