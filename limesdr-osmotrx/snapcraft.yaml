@@ -67,8 +67,7 @@ parts:
 
     osmotrx:
         plugin: autotools
-        source: https://github.com/myriadrf/osmo-trx.git
-        source-branch: myriadrf/limesdr
+        source: git://git.osmocom.org/osmo-trx
         after: [uhd, osmocombo]
 
     uhd:
