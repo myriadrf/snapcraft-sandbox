@@ -109,8 +109,12 @@ parts:
             - -DENABLE_SPHINX=OFF
             - -DENABLE_GR_UHD=OFF
             - -DENABLE_GR_QTGUI=OFF
+            - -DPYTHON_EXECUTABLE=/usr/bin/python
 
         after: [desktop-gtk3, volk]
+
+        install: |
+            sed -i 's|/usr/bin/|/usr/bin/env |g' $SNAPCRAFT_PART_INSTALL/bin/*
 
     grosmosdr:
         plugin: cmake
