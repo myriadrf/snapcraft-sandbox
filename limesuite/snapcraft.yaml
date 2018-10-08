@@ -1,5 +1,5 @@
 name: limesuite
-version: 17.02.1.0
+version: 18.10.0.0
 summary: LimeSuite apps
 description: LimeSuite command line utility and Graphical eval app.
 confinement: strict
@@ -11,24 +11,30 @@ environment:
 apps:
     LimeUtil:
         command: LimeUtil
-        plugs: [network, home]
+        plugs: [network, home, raw-usb]
+
+    LimeQuickTest:
+        command: desktop-launch LimeQuickTest
+        plugs: [unity7, opengl, raw-usb]
 
     LimeSuiteGUI:
         command: desktop-launch LimeSuiteGUI
-        plugs: [network, home, x11, opengl]
+        plugs: [network, home, unity7, opengl, raw-usb]
 parts:
 
     limesuite:
         plugin: cmake
         source: https://github.com/myriadrf/LimeSuite.git
         source-branch: stable
-        after: [desktop-gtk3]
+        after: [desktop-gtk2]
         configflags:
             - -DENABLE_SOAPY_LMS7=OFF
             - -DDOWNLOAD_IMAGES=TRUE
+            - -DENABLE_EXAMPLES=OFF
+            - -DENABLE_UTILITIES=OFF
+            - -DENABLE_HEADERS=OFF
+            - -DENABLE_SIMD_FLAGS=SSE3
         build-packages:
-            - libsqlite3-dev
-            - libi2c-dev
-            - libusb-1.0-0-dev
             - libwxgtk3.0-dev
-            - freeglut3-dev
+            - libfltk1.3-dev
+            - libusb-1.0-0-dev
