@@ -1,5 +1,5 @@
 name: limesdr-pothos 
-version: 0.4.3.0
+version: 0.6.1.0
 summary: LimeSuite + Pothos apps
 description: LimeSuite driver, SoapySDR, Pothos GUI, BTLE Demo
 confinement: strict
@@ -22,7 +22,7 @@ apps:
         plugs: [network, network-bind, home]
 
     PothosGui:
-        command: desktop-launch PothosGui
+        command: desktop-launch PothosFlow
         plugs: [network, network-bind, x11, opengl, home]
 
 parts:
@@ -47,10 +47,11 @@ parts:
         configflags:
             - -DENABLE_GUI=OFF
             - -DDOWNLOAD_IMAGES=TRUE
+            - -DENABLE_EXAMPLES=OFF
+            - -DENABLE_UTILITIES=OFF
+            - -DENABLE_SIMD_FLAGS=SSE3
         after: [soapysdr]
         build-packages:
-            - libsqlite3-dev
-            - libi2c-dev
             - libusb-1.0-0-dev
 
     poco:

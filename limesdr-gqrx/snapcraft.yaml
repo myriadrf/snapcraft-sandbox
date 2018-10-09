@@ -1,5 +1,5 @@
 name: limesdr-gqrx
-version: 2.6.1.1
+version: 2.11.5.5
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
@@ -54,10 +54,11 @@ parts:
         configflags:
             - -DENABLE_GUI=OFF
             - -DDOWNLOAD_IMAGES=TRUE
+            - -DENABLE_EXAMPLES=OFF
+            - -DENABLE_UTILITIES=OFF
+            - -DENABLE_SIMD_FLAGS=SSE3
         after: [soapysdr]
         build-packages:
-            - libsqlite3-dev
-            - libi2c-dev
             - libusb-1.0-0-dev
 
     volk:
@@ -70,7 +71,7 @@ parts:
     gnuradio:
         plugin: cmake
         source: https://github.com/gnuradio/gnuradio.git
-        source-branch: maint
+        source-branch: maint-3.7
         build-packages:
             - libasound2-dev
             - libboost-all-dev
@@ -91,6 +92,7 @@ parts:
             - libxrender-dev
             - libzmq3-dev
             - portaudio19-dev
+            - libblas-dev
         configflags:
             - -DENABLE_PYTHON=OFF
             - -DENABLE_TESTING=OFF
