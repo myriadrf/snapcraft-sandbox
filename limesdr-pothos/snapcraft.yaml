@@ -1,5 +1,5 @@
 name: limesdr-pothos 
-version: 0.6.1.0
+version: 0.6.1.1
 summary: LimeSuite + Pothos apps
 description: LimeSuite driver, SoapySDR, Pothos GUI, BTLE Demo
 confinement: strict
@@ -15,15 +15,15 @@ apps:
 
     SoapySDRUtil:
         command: SoapySDRUtil
-        plugs: [network]
+        plugs: [network, network-bind, home, raw-usb]
 
     PothosUtil:
         command: PothosUtil
-        plugs: [network, network-bind, home]
+        plugs: [network, network-bind, home, raw-usb]
 
     PothosGui:
         command: desktop-launch PothosFlow
-        plugs: [network, network-bind, x11, opengl, home]
+        plugs: [network, network-bind, x11, opengl, home, raw-usb]
 
 parts:
     soapysdr:
