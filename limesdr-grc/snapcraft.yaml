@@ -70,17 +70,11 @@ parts:
             - libi2c-dev
             - libusb-1.0-0-dev
 
-    volk:
-        plugin: cmake
-        source: https://github.com/gnuradio/volk.git
-        source-branch: master #must be master for now for VOLK_PREFIX
-        build-packages: [libboost-all-dev, liborc-0.4-dev]
-        after: [pythonmodules]
-
     gnuradio:
         plugin: cmake
         source: https://github.com/gnuradio/gnuradio.git
-        source-branch: maint
+        source-type: git
+        source-branch: maint-3.7
         build-packages:
             - python-dev
             - libasound2-dev
@@ -102,16 +96,18 @@ parts:
             - libxrender-dev
             - libzmq3-dev
             - portaudio19-dev
+        stage-packages:
+            - libblas-dev 
         configflags:
             - -DENABLE_TESTING=OFF
-            - -DENABLE_INTERNAL_VOLK=OFF
+            - -DENABLE_INTERNAL_VOLK=ON
             - -DENABLE_DOXYGEN=OFF
             - -DENABLE_SPHINX=OFF
             - -DENABLE_GR_UHD=OFF
             - -DENABLE_GR_QTGUI=OFF
             - -DPYTHON_EXECUTABLE=/usr/bin/python
 
-        after: [desktop-gtk3, volk]
+        after: [desktop-gtk3, pythonmodules]
 
         install: |
             sed -i 's|/usr/bin/|/usr/bin/env |g' $SNAPCRAFT_PART_INSTALL/bin/*

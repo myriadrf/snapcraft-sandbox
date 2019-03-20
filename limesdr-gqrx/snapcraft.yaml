@@ -61,16 +61,10 @@ parts:
         build-packages:
             - libusb-1.0-0-dev
 
-    volk:
-        plugin: cmake
-        source: https://github.com/gnuradio/volk.git
-        source-branch: master #must be master for now for VOLK_PREFIX
-        build-packages: [libboost-all-dev, liborc-0.4-dev]
-        after: [pythonmodules]
-
     gnuradio:
         plugin: cmake
         source: https://github.com/gnuradio/gnuradio.git
+        source-type: git
         source-branch: maint-3.7
         build-packages:
             - libasound2-dev
@@ -96,12 +90,11 @@ parts:
         configflags:
             - -DENABLE_PYTHON=OFF
             - -DENABLE_TESTING=OFF
-            - -DENABLE_INTERNAL_VOLK=OFF
+            - -DENABLE_INTERNAL_VOLK=ON
             - -DENABLE_DOXYGEN=OFF
             - -DENABLE_SPHINX=OFF
             - -DENABLE_GR_QTGUI=OFF
             - -DENABLE_GR_WXGUI=OFF
-        after: [volk]
 
     grosmosdr:
         plugin: cmake
@@ -114,7 +107,10 @@ parts:
     gqrx:
         plugin: cmake
         source: https://github.com/csete/gqrx.git
-        build-packages: [qtbase5-dev]
+        build-packages: 
+            - qtbase5-dev
+            - qttools5-dev
+            - libqt5svg5-dev
         after: [grosmosdr, desktop-qt5]
 
     pythonmodules:
