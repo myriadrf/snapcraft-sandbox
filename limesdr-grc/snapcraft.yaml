@@ -1,5 +1,5 @@
 name: limesdr-grc
-version: 3.7.11.1.0
+version: 3.7.13.4.0
 summary: LimeSuite + GRC
 description: LimeSuite driver, SoapySDR, GRC, DTV demo, RDS, DRM
 confinement: strict
@@ -14,16 +14,17 @@ environment:
     VOLK_PREFIX: $SNAP
     GR_PREFIX: $SNAP
     PYTHONPATH: $SNAP/lib/python2.7/dist-packages/
+    LD_LIBRARY_PATH: $SNAP/usr/lib/lapack/:$SNAP/usr/lib/libblas/:$LD_LIBRARY_PATH
 
 apps:
 
     SoapySDRUtil:
         command: SoapySDRUtil
-        plugs: [network]
+        plugs: [network, network-bind, home, raw-usb]
 
     gnuradio-companion:
         command: desktop-launch gnuradio-companion
-        plugs: [network, network-bind, x11, opengl, home]
+        plugs: [network, network-bind, x11, opengl, home, raw-usb]
 
     gnuradio-config-info:
         command: gnuradio-config-info
@@ -36,11 +37,11 @@ apps:
 
     osmocom-fft:
         command: desktop-launch osmocom_fft
-        plugs: [network, network-bind, x11, opengl, home]
+        plugs: [network, network-bind, x11, opengl, home, raw-usb]
 
     osmocom-siggen:
         command: desktop-launch osmocom_siggen
-        plugs: [network, network-bind, x11, opengl, home]
+        plugs: [network, network-bind, x11, opengl, home, raw-usb]
 
 parts:
     soapysdr:
@@ -96,21 +97,30 @@ parts:
             - libxrender-dev
             - libzmq3-dev
             - portaudio19-dev
+            - libblas-dev
+            - liblapack-dev
         stage-packages:
-            - libblas-dev 
+            - libblas3
+            - liblapack3
         configflags:
             - -DENABLE_TESTING=OFF
             - -DENABLE_INTERNAL_VOLK=ON
             - -DENABLE_DOXYGEN=OFF
             - -DENABLE_SPHINX=OFF
             - -DENABLE_GR_UHD=OFF
-            - -DENABLE_GR_QTGUI=OFF
+            - -DENABLE_GR_QTGUI=ON
             - -DPYTHON_EXECUTABLE=/usr/bin/python
 
-        after: [desktop-gtk3, pythonmodules]
+        after: [desktop-gtk2, pythonmodules]
 
         install: |
             sed -i 's|/usr/bin/|/usr/bin/env |g' $SNAPCRAFT_PART_INSTALL/bin/*
+
+    grlimesdr:
+        plugin: cmake
+        source: https://github.com/myriadrf/gr-limesdr
+        source-type: git
+        after: [limesuite, gnuradio]
 
     grosmosdr:
         plugin: cmake
