@@ -1,5 +1,5 @@
 name: limesdr-gqrx
-version: 2.11.5.5
+version: 2.11.5.9
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
@@ -17,11 +17,11 @@ apps:
 
     SoapySDRUtil:
         command: SoapySDRUtil
-        plugs: [network]
+        plugs: [network, network-bind, home, raw-usb]
 
     gqrx:
         command: desktop-launch gqrx
-        plugs: [network, x11, pulseaudio, opengl, home]
+        plugs: [network, network-bind, unity7, pulseaudio, opengl, home, raw-usb]
 
     gnuradio-config-info:
         command: gnuradio-config-info
@@ -99,9 +99,10 @@ parts:
     grosmosdr:
         plugin: cmake
         source: git://git.osmocom.org/gr-osmosdr
-        build-packages: [libboost-all-dev]
+        build-packages: [libosmosdr-dev]
         configflags:
             - -DENABLE_PYTHON=OFF
+            - -DENABLE_IQBALANCE=OFF
         after: [soapysdr, gnuradio]
 
     gqrx:
@@ -111,6 +112,7 @@ parts:
             - qtbase5-dev
             - qttools5-dev
             - libqt5svg5-dev
+            - unity-gtk-module-common
         after: [grosmosdr, desktop-qt5]
 
     pythonmodules:
