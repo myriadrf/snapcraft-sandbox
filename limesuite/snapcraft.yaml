@@ -1,5 +1,5 @@
 name: limesuite
-version: 19.01.0.0
+version: 20.01.0.0
 summary: LimeSuite apps
 description: LimeSuite command line utility and Graphical eval app.
 confinement: strict
@@ -11,15 +11,15 @@ environment:
 apps:
     LimeUtil:
         command: LimeUtil
-        plugs: [network, home, raw-usb]
+        plugs: [network, home, unity7, raw-usb]
 
     LimeQuickTest:
         command: desktop-launch LimeQuickTest
-        plugs: [unity7, opengl, raw-usb]
+        plugs: [unity7, opengl, raw-usb, x11, wayland]
 
     LimeSuiteGUI:
         command: desktop-launch LimeSuiteGUI
-        plugs: [network, home, unity7, opengl, raw-usb]
+        plugs: [network, home, unity7, opengl, raw-usb, x11, wayland]
 parts:
 
     limesuite:
@@ -38,3 +38,9 @@ parts:
             - libwxgtk3.0-dev
             - libfltk1.3-dev
             - libusb-1.0-0-dev
+        stage-packages:
+            - libwxgtk3.0-0v5
+            - libfltk1.3
+            - libusb-1.0-0
+            - libstdc++6
+
