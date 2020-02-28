@@ -1,5 +1,5 @@
 name: limesdr-gqrx
-version: 2.11.5.9
+version: 2.11.5.13
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
@@ -21,7 +21,7 @@ apps:
 
     gqrx:
         command: desktop-launch gqrx
-        plugs: [network, network-bind, unity7, pulseaudio, opengl, home, raw-usb]
+        plugs: [network, network-bind, unity7, pulseaudio, alsa, opengl, home, raw-usb, x11, wayland]
 
     gnuradio-config-info:
         command: gnuradio-config-info
@@ -87,6 +87,7 @@ parts:
             - libzmq3-dev
             - portaudio19-dev
             - libblas-dev
+            - python-mako
         configflags:
             - -DENABLE_PYTHON=OFF
             - -DENABLE_TESTING=OFF

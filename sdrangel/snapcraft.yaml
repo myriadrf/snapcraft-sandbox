@@ -1,0 +1,118 @@
+name: sdrangel
+version: 5.1.0
+summary: SDRangel + LimeSDR
+description: SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
+confinement: strict
+grade: stable
+base: core18
+
+environment:
+    LD_LIBRARY_PATH: $SNAP/lib/sdrangel/:$LD_LIBRARY_PATH
+
+apps:
+    sdrangel:
+        command: desktop-launch sdrangel
+        plugs: [network, network-bind, home, unity7, opengl, raw-usb, pulseaudio, alsa, x11, wayland]
+
+    LimeUtil:
+        command: LimeUtil
+        plugs: [network, network-bind, home, raw-usb]
+
+    sdrangelsrv:
+        command: sdrangelsrv
+        plugs: [network, network-bind, home, raw-usb]        
+
+    sdrangelbench:
+        command: sdrangelbench        
+
+parts:
+
+    limesuite:
+        plugin: cmake
+        source: https://github.com/myriadrf/LimeSuite.git
+        source-branch: stable
+        configflags:
+            - -DENABLE_QUICKTEST=OFF
+            - -DENABLE_GUI=OFF
+            - -DENABLE_SOAPY_LMS7=OFF
+            - -DENABLE_EXAMPLES=OFF
+            - -DENABLE_UTILITIES=OFF
+            - -DENABLE_HEADERS=ON
+            - -DENABLE_SIMD_FLAGS=SSE3
+        build-packages:
+            - libusb-1.0-0-dev
+        stage-packages:
+            - libstdc++6
+
+    sdrangel:
+        plugin: cmake
+        source: https://github.com/f4exb/sdrangel
+        source-type: git
+        source-tag: v5.1.0
+        after: [desktop-qt5, limesuite, mbelib, serialdv, dsdcc, codec2, cm265cc]
+        configflags:
+            - -DDEBUG_OUTPUT=ON
+            - -DBUILD_TYPE=RELEASE
+            - -DRX_SAMPLE_24BIT=ON
+            - -DSERIALDV_DIR=$SNAPCRAFT_STAGE
+        build-packages:
+            - libfftw3-dev
+            - libusb-1.0-0-dev
+            - libusb-dev 
+            - qt5-default
+            - qtbase5-dev
+            - qtchooser
+            - libqt5multimedia5-plugins
+            - qtmultimedia5-dev
+            - libqt5websockets5-dev
+            - qttools5-dev
+            - qttools5-dev-tools
+            - libqt5opengl5-dev
+            - libboost-all-dev
+            - libasound2-dev
+            - pulseaudio
+            - libopencv-dev
+            - libxml2-dev
+            - libavcodec-dev
+            - libavformat-dev
+            - libopus-dev
+        stage-packages:
+            - bison
+            - flex
+            - ffmpeg
+            - pulseaudio
+
+    mbelib:
+        plugin: cmake
+        source: https://github.com/szechyjs/mbelib.git
+        source-type: git
+        source-commit: 9a04ed5
+
+    serialdv:
+        plugin: cmake
+        source: https://github.com/f4exb/serialDV.git
+        source-type: git
+        source-tag: v1.1.4
+
+    dsdcc:
+        plugin: cmake
+        source: https://github.com/f4exb/dsdcc.git
+        source-type: git
+        source-tag: v1.8.6
+        configflags:
+            - -DUSE_MBELIB=ON
+
+    codec2:
+        plugin: cmake
+        source: https://github.com/drowe67/codec2.git
+        source-type: git
+        source-commit: 76a2041
+        build-packages:
+            - libspeexdsp-dev 
+            - libsamplerate0-dev
+
+    cm265cc:
+        plugin: cmake
+        source: https://github.com/f4exb/cm256cc.git
+        source-type: git
+        source-commit: f21e8bc

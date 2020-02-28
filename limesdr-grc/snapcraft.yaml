@@ -1,9 +1,10 @@
 name: limesdr-grc
-version: 3.7.13.4.0
+version: 3.8.0.0
 summary: LimeSuite + GRC
-description: LimeSuite driver, SoapySDR, GRC, DTV demo, RDS, DRM
+description: LimeSuite driver, SoapySDR, GRC, RDS
 confinement: strict
 grade: stable
+base: core18
 
 environment:
     LIME_SUITE_ROOT: $SNAP
@@ -13,8 +14,9 @@ environment:
     VOLK_CONFIGPATH: $SNAP_USER_COMMON
     VOLK_PREFIX: $SNAP
     GR_PREFIX: $SNAP
-    PYTHONPATH: $SNAP/lib/python2.7/dist-packages/
-    LD_LIBRARY_PATH: $SNAP/usr/lib/lapack/:$SNAP/usr/lib/libblas/:$LD_LIBRARY_PATH
+    PYTHONPATH: $SNAP/lib/python3/dist-packages/
+    LD_LIBRARY_PATH: $SNAP/usr/lib/x86_64-linux-gnu/lapack/:$SNAP/usr/lib/x86_64-linux-gnu/blas/:$LD_LIBRARY_PATH
+    QT_QPA_PLATFORM_PLUGIN_PATH: $SNAP/usr/lib/x86_64-linux-gnu/qt5/plugins
 
 apps:
 
@@ -24,7 +26,7 @@ apps:
 
     gnuradio-companion:
         command: desktop-launch gnuradio-companion
-        plugs: [network, network-bind, x11, opengl, home, raw-usb]
+        plugs: [network, network-bind, x11, opengl, unity7, home, pulseaudio, alsa, raw-usb, wayland]
 
     gnuradio-config-info:
         command: gnuradio-config-info
@@ -34,14 +36,6 @@ apps:
 
     volk-profile:
         command: volk_profile
-
-    osmocom-fft:
-        command: desktop-launch osmocom_fft
-        plugs: [network, network-bind, x11, opengl, home, raw-usb]
-
-    osmocom-siggen:
-        command: desktop-launch osmocom_siggen
-        plugs: [network, network-bind, x11, opengl, home, raw-usb]
 
 parts:
     soapysdr:
@@ -75,43 +69,51 @@ parts:
         plugin: cmake
         source: https://github.com/gnuradio/gnuradio.git
         source-type: git
-        source-branch: maint-3.7
-        build-packages:
-            - python-dev
-            - libasound2-dev
-            - libboost-all-dev
-            - libcodec2-dev
-            - libcomedi-dev
-            - libfftw3-dev
-            - libfontconfig1-dev
-            - libgsl-dev
-            - libgsm1-dev
-            - libjack-jackd2-dev
-            - liblog4cpp5-dev
-            - libpulse-dev
-            - libqt4-dev
-            - libqwt5-qt4-dev
-            - libsdl1.2-dev
-            - libsndfile1-dev
-            - libxi-dev
-            - libxrender-dev
-            - libzmq3-dev
-            - portaudio19-dev
-            - libblas-dev
-            - liblapack-dev
-        stage-packages:
-            - libblas3
-            - liblapack3
+        source-branch: maint-3.8
         configflags:
+            - -DCMAKE_BUILD_TYPE=Release
+            - -DPYTHON_EXECUTABLE=/usr/bin/python3
             - -DENABLE_TESTING=OFF
             - -DENABLE_INTERNAL_VOLK=ON
             - -DENABLE_DOXYGEN=OFF
-            - -DENABLE_SPHINX=OFF
             - -DENABLE_GR_UHD=OFF
-            - -DENABLE_GR_QTGUI=ON
-            - -DPYTHON_EXECUTABLE=/usr/bin/python
-
-        after: [desktop-gtk2, pythonmodules]
+        build-packages:
+            - libboost-all-dev
+            - libgmp-dev
+            - libfftw3-dev
+            - libcomedi-dev
+            - libsdl1.2-dev
+            - libgsl-dev
+            - libqwt-qt5-dev
+            - libqt5opengl5-dev
+            - liblog4cpp5-dev
+            - libzmq3-dev
+            - libgsm1-dev
+            - libcodec2-dev
+            - liborc-0.4-dev
+            - libgmp3-dev
+            - portaudio19-dev
+            - libpython3.6-dev
+            - python3-pyqt5
+            - python3-numpy
+            - python3-sphinx
+            - swig
+        stage-packages:
+            - libblas3
+            - liblapack3
+            - libgtk-3-0
+            - libgtk-3-common
+            - python3-gi
+            - gobject-introspection
+            - gir1.2-gtk-3.0
+            - libqt5dbus5
+            - libqt5widgets5
+            - libqt5network5
+            - libqt5gui5
+            - libqt5core5a
+            - libdouble-conversion1
+            - libxcb-xinerama0
+        after: [desktop-qt5, pythonmodules]
 
         install: |
             sed -i 's|/usr/bin/|/usr/bin/env |g' $SNAPCRAFT_PART_INSTALL/bin/*
@@ -120,40 +122,29 @@ parts:
         plugin: cmake
         source: https://github.com/myriadrf/gr-limesdr
         source-type: git
+        source-branch: gr-3.8
         after: [limesuite, gnuradio]
-
-    grosmosdr:
-        plugin: cmake
-        source: git://git.osmocom.org/gr-osmosdr
-        after: [soapysdr, gnuradio]
 
     grrds:
         plugin: cmake
         source: https://github.com/bastibl/gr-rds.git
-        after: [gnuradio]
-
-    grdrm:
-        plugin: cmake
-        source: https://github.com/kit-cel/gr-drm.git
+        source-branch: maint-3.8
         after: [gnuradio]
 
     pythonmodules:
         plugin: dump
         source: .
-        organize:
-            wx.pth: usr/lib/wx/python/wx.pth
         stage-packages:
-            - python
-            - python-six
-            - python-opengl
-            - python-cheetah
-            - python-mako
-            - python-numpy
-            - python-scipy
-            - python-gtk2
-            - python-lxml
-            - python-wxgtk3.0
-            - python-wxversion
-            - python-zmq
-            - python-qwt5-qt4
+            - python3-gi-cairo
+            - python3-yaml
+            - python3-click
+            - python3-click-plugins
+            - python3-zmq
+            - python3-scipy
             - swig
+            - python3-numpy
+            - python3-mako
+            - python3-sphinx
+            - python3-lxml
+            - python3-pyqt5
+
