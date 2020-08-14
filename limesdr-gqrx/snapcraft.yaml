@@ -1,9 +1,10 @@
 name: limesdr-gqrx
-version: 2.11.5.13
+version: 2.12.1.52
 summary: LimeSuite + GQRX
 description: LimeSuite driver, SoapySDR, GQRX
 confinement: strict
 grade: stable
+base: core18
 
 environment:
     LIME_SUITE_ROOT: $SNAP
@@ -12,7 +13,7 @@ environment:
     VOLK_CONFIGPATH: $SNAP_USER_COMMON
     VOLK_PREFIX: $SNAP
     GR_PREFIX: $SNAP
-
+    
 apps:
 
     SoapySDRUtil:
@@ -65,7 +66,15 @@ parts:
         plugin: cmake
         source: https://github.com/gnuradio/gnuradio.git
         source-type: git
-        source-branch: maint-3.7
+        source-branch: maint-3.8
+        configflags:
+            - -DENABLE_PYTHON=OFF
+            - -DENABLE_TESTING=OFF
+            - -DENABLE_INTERNAL_VOLK=ON
+            - -DENABLE_DOXYGEN=OFF
+            - -DENABLE_SPHINX=OFF
+            - -DENABLE_GR_QTGUI=OFF
+            - -DENABLE_GR_WXGUI=OFF
         build-packages:
             - libasound2-dev
             - libboost-all-dev
@@ -88,14 +97,11 @@ parts:
             - portaudio19-dev
             - libblas-dev
             - python-mako
-        configflags:
-            - -DENABLE_PYTHON=OFF
-            - -DENABLE_TESTING=OFF
-            - -DENABLE_INTERNAL_VOLK=ON
-            - -DENABLE_DOXYGEN=OFF
-            - -DENABLE_SPHINX=OFF
-            - -DENABLE_GR_QTGUI=OFF
-            - -DENABLE_GR_WXGUI=OFF
+        override-build: |
+            snapcraftctl build
+            sed -i 's;"/include";"${_IMPORT_PREFIX}";' $SNAPCRAFT_PART_INSTALL/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+            sed -i 's;"/include";"${_IMPORT_PREFIX}";' $SNAPCRAFT_PART_INSTALL/lib/cmake/gnuradio/gnuradio-pmtTargets.cmake
+
 
     grosmosdr:
         plugin: cmake

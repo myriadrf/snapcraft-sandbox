@@ -1,5 +1,5 @@
 name: limesdr-grc
-version: 3.8.0.0
+version: 3.8.1.0
 summary: LimeSuite + GRC
 description: LimeSuite driver, SoapySDR, GRC, RDS
 confinement: strict
@@ -70,6 +70,7 @@ parts:
         source: https://github.com/gnuradio/gnuradio.git
         source-type: git
         source-branch: maint-3.8
+        after: [desktop-qt5, pythonmodules]
         configflags:
             - -DCMAKE_BUILD_TYPE=Release
             - -DPYTHON_EXECUTABLE=/usr/bin/python3
@@ -97,6 +98,7 @@ parts:
             - python3-pyqt5
             - python3-numpy
             - python3-sphinx
+            - python3-mako
             - swig
         stage-packages:
             - libblas3
@@ -113,10 +115,16 @@ parts:
             - libqt5core5a
             - libdouble-conversion1
             - libxcb-xinerama0
-        after: [desktop-qt5, pythonmodules]
-
-        install: |
+            - python3-mako
+        override-pull: |
+            snapcraftctl pull
+            git checkout $(git describe --tags --abbrev=0)
+        override-build: |
+            snapcraftctl build
             sed -i 's|/usr/bin/|/usr/bin/env |g' $SNAPCRAFT_PART_INSTALL/bin/*
+            sed -i 's;"/include";"${_IMPORT_PREFIX}";' $SNAPCRAFT_PART_INSTALL/lib/cmake/gnuradio/gnuradio-runtimeTargets.cmake
+            sed -i 's;"/include";"${_IMPORT_PREFIX}";' $SNAPCRAFT_PART_INSTALL/lib/cmake/gnuradio/gnuradio-pmtTargets.cmake
+            
 
     grlimesdr:
         plugin: cmake
@@ -124,6 +132,8 @@ parts:
         source-type: git
         source-branch: gr-3.8
         after: [limesuite, gnuradio]
+        configflags:
+            - -DENABLE_RFE=ON
 
     grrds:
         plugin: cmake
@@ -147,4 +157,3 @@ parts:
             - python3-sphinx
             - python3-lxml
             - python3-pyqt5
-
